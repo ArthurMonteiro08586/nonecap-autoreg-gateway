@@ -1,0 +1,72 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "hcaptcha_solve",
+        "description": "Solve an hCaptcha challenge via the NoneCap gateway (pool of nc_live_ keys, auto-rotation, proxy fallback). Returns a P1_ token to inject into the target form's h-captcha-response field, together with the user_agent that MUST be used when submitting the token.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sitekey": {"type": "string", "description": "hCaptcha sitekey of the target page"},
+            "url": {"type": "string", "description": "Full URL of the page hosting the hCaptcha"},
+            "wait": {"type": "integer", "description": "Max seconds to block waiting for a terminal solve (1-90). Default 30.", "default": 30},
+            "stream": {"type": "boolean", "description": "true = SSE stream of progress events (pick/solving/polling/result/error) instead of one JSON response", "default": false}
+          },
+          "required": ["sitekey", "url"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "gateway_health",
+        "description": "NoneCap gateway status: alive keys, proxy pool size, uptime, solved/failed counters.",
+        "parameters": {"type": "object", "properties": {}}
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "gateway_pool",
+        "description": "List pool keys with per-key balance/status (queried live through proxies).",
+        "parameters": {"type": "object", "properties": {}}
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fs_list",
+        "description": "List a directory visible to the agent (whitelist: Desktop, tmp, SESSION-BASE). Returns names, dir flags, sizes.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {"type": "string", "description": "Path relative to user home, e.g. 'Desktop/nonecap_accounts.txt' parent dir. Default: Desktop"}
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fs_read",
+        "description": "Read a text file visible to the agent (<=2MB, same whitelist as fs_list).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {"type": "string", "description": "Path relative to user home, e.g. 'tmp/live_http_proxies.txt'"}
+          },
+          "required": ["path"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "pool_reload",
+        "description": "Re-read the key pool from nonecap_accounts.txt after new registrations.",
+        "parameters": {"type": "object", "properties": {}}
+      }
+    }
+  ]
+}
